@@ -1,0 +1,15 @@
+#header{
+    font-size: 2.5rem;
+    font-weight: 500;
+}
+
+.forecast{
+    box-sizing: border-box;
+    background-color:#007bff;
+    width: 17%;
+    height: 165px;
+    margin-left: 15px;
+    border-radius: 5px;
+    color: white;
+    padding: 8px;
+}
