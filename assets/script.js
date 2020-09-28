@@ -9,12 +9,16 @@ var displayCard = $("#tem-display");
 
 var searchList = JSON.parse(localStorage.getItem("search")) || []
 
+function getUserInput() {
+    var userInput = $("#city-name").val().trim();
+    return userInput;
+}
 
-function renderCurrent() {
+function renderWeather() {
 
     displayCard.empty()
 
-    var userInput = $("#city-name").val().trim();
+    var userInput = getUserInput();
 
     if (userInput !== "") {
         var queryCurrentURL = "https://api.openweathermap.org/data/2.5/weather?q=" + userInput + "&units=imperial&appid=" + APIKey;
@@ -108,38 +112,36 @@ function renderCurrent() {
                 console.log(responesFc);
             })
         })
-
-
-        // https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&appid={API key}
-
-        // var queryForecastURL = "https://api.openweathermap.org/data/2.5/onecall?q=" + userInput + "&exclude=hourly&units=imperial&appid=" + APIKey;
-        // console.log(queryForecastURL);
-        // $.ajax({
-        //     url: queryForecastURL,
-        //     method: "GET"
-        // }).then(function (respones) {
-        //     console.log(respones);
-
-
-        // })
     }
-
-
 }
 
-// renderCurrent();
 
-function displayForecast() {
+//TODO
+function saveSearch() {
+    var searchLi = $("<li>");
+    searchLi.addClass("list-group-item");
+    searchLi.text(getUserInput());
 
-
+    if (getUserInput() !== "") {
+        // console.log(getUserInput());
+        $("#search-btn").prepend(searchLi);
+        searchList.push(getUserInput());
+        localStorage.setItem("search", JSON.stringify(searchList));
+        // console.log(searchList);
+    }
+    else return;
 }
+
+
+
+
 
 $("#btn-search").on("click", function (event) {
-    renderCurrent();
+    renderWeather();
+    saveSearch();
 
 });
-// displayCurrent();
-// displayForecast();
+
 
 
 
