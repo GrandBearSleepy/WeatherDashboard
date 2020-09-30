@@ -13,3 +13,34 @@
     color: white;
     padding: 8px;
 }
+
+.capitalize{
+    text-transform: capitalize;
+}
+
+li:hover{
+    cursor: pointer;
+}
+
+.low{
+    background-color: green;
+}
+
+.moderate {
+    background-color: yellow;
+}
+
+.high {
+    background-color: orange;
+}
+
+.veryhigh {
+    background-color: red;
+    color: white;
+}
+
+.extreme {
+    background-color: purple;
+    color: white;
+}
+

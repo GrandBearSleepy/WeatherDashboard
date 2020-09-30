@@ -7,33 +7,48 @@ var APIKey = "738fd9d3767b833f423425850f9dfed7";
 
 var displayCard = $("#tem-display");
 
-var searchList = JSON.parse(localStorage.getItem("search")) || []
+var searchList = JSON.parse(localStorage.getItem("search")) || [];
+
+renderSearchList();
 
 function getUserInput() {
     var userInput = $("#city-name").val().trim();
+    if (userInput !== "") {
+
+        var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + userInput + "&units=imperial&appid=" + APIKey;
+        $.ajax({
+            url: queryURL,
+            method: "GET",
+            success: function () {
+                searchList.unshift(userInput);
+                searchList = searchList.slice(0, 5);
+                searchList = Array.from(new Set(searchList));
+                localStorage.setItem("search", JSON.stringify(searchList));
+                renderSearchList();
+            }
+        })
+    }
+    else return;
     return userInput;
 }
 
-function renderWeather() {
+function renderWeather(city) {
 
     displayCard.empty()
+    // var city = getUserInput();
 
-    var userInput = getUserInput();
-
-    if (userInput !== "") {
-        var queryCurrentURL = "https://api.openweathermap.org/data/2.5/weather?q=" + userInput + "&units=imperial&appid=" + APIKey;
+    if (city !== "") {
+        var queryCurrentURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=" + APIKey;
         $.ajax({
             url: queryCurrentURL,
             method: "GET"
         }).then(function (responseCu) {
             console.log(responseCu);
 
-            // cityName = $("#city-name").val();
             var dateStamp = responseCu.dt;
             //this retrieves the unix timestamp
             var dateString = moment.unix(dateStamp).format("MM/DD/YYYY");
 
-            // var date = new Date(unix_timestamp * 1000);
             console.log(dateString);
             $("#city").text(responseCu.name + " (" + dateString + ") ");
             var iconImg = $("<img>");
@@ -57,28 +72,47 @@ function renderWeather() {
             var lon = responseCu.coord.lon;
             var queryUvURL = "http://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&units=imperial&appid=" + APIKey;
 
-            // console.log(queryUvURL);
-
             $.ajax({
                 url: queryUvURL,
                 method: "GET"
             }).then(function (responseUv) {
+                var UVSpan = $("<span>");
                 var UVDiv = $("<div>");
-                UVDiv.text("UV Index: " + responseUv.value);
+                var UV = responseUv.value;
+                UVDiv.text("UV Index: ");
+                UVSpan.text(UV);
                 UVDiv.attr("id", "UV-index");
+                UVDiv.append(UVSpan);
                 displayCard.append(UVDiv);
-                // console.log(response);
 
+
+
+                // Set the class dependent on the UV index
+                if (UV <= 2) {
+                    rating = "low";
+                }
+                else if (UV <= 5) {
+                    rating = "moderate";
+                }
+                else if (UV <= 7) {
+                    rating = "high";
+                }
+                else if (UV <= 10) {
+                    rating = "veryhigh";
+                }
+                else {
+                    rating = "extreme";
+                }
+                UVSpan.addClass(rating);
             })
-            // console.log(response);
+
             var queryForecastURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&units=imperial&appid=" + APIKey;
-            console.log(queryForecastURL);
             $.ajax({
                 url: queryForecastURL,
                 method: "GET"
             }).then(function (responesFc) {
-                var fiveDayForecast = responesFc.daily.slice(0, 5);
-
+                var fiveDayForecast = responesFc.daily.slice(1, 6);
+                $(".forecast").empty();
                 for (var i = 0; i < fiveDayForecast.length; i++) {
                     var dateFc = $("<h6>");
                     dateFc.text(moment.unix(fiveDayForecast[i].dt).format("MM/DD/YYYY"))
@@ -93,7 +127,6 @@ function renderWeather() {
                     $("#" + i).append(iconFcImg);
                     $("#" + i).append(br);
 
-                    console.log(iconFcCode);
                     var tempP = $("<p>");
                     var tempFc = "Temp: " + fiveDayForecast[i].temp.day + " \xB0F";
                     tempP.text(tempFc);
@@ -105,55 +138,38 @@ function renderWeather() {
                     humP.text("Humidity: " + humFc + " %");
                     $("#" + i).append(humP);
                 }
-
-                typeof fiveDayForecast;
-
-                console.log(fiveDayForecast);
-                console.log(responesFc);
             })
+        }).fail(function () {
+            alert("Couldn't find the city, please try again");
         })
     }
 }
 
 
-//TODO
-function saveSearch() {
-    var searchLi = $("<li>");
-    searchLi.addClass("list-group-item");
-    searchLi.text(getUserInput());
-
-    if (getUserInput() !== "") {
-        // console.log(getUserInput());
-        $("#search-btn").prepend(searchLi);
-        searchList.push(getUserInput());
-        localStorage.setItem("search", JSON.stringify(searchList));
-        // console.log(searchList);
+function renderSearchList() {
+    $("#search-list").empty();
+    for (var i = 0; i < searchList.length; i++) {
+        var searchLi = $("<li>");
+        searchLi.addClass("capitalize");
+        searchLi.addClass("list-group-item");
+        searchLi.addClass("serch-list")
+        searchLi.text(searchList[i]);
+        $("#search-list").append(searchLi);
     }
-    else return;
 }
 
-
-
-
-
 $("#btn-search").on("click", function (event) {
-    renderWeather();
-    saveSearch();
+    event.preventDefault();
+    renderWeather(getUserInput());
+    renderSearchList();
+});
 
+$(document).on("click", ".serch-list", function () {
+    event.preventDefault();
+    var listName = $(this).text();
+    renderWeather(listName);
 });
 
 
 
-
-
-
-
-
-
-// $.ajax({
-//     url: queryForecastURL,
-//     method: "GET"
-// }).then(function (response) {
-//     console.log(response);
-// })
 
