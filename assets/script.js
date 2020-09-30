@@ -1,28 +1,27 @@
-// api.openweathermap.org / data / 2.5 / weather ? q = { city name } & appid={ API key }
-//api.openweathermap.org/data/2.5/forecast?q={city name}&appid={API key}
-// var userInput = "perth";
-
-
+//api key
 var APIKey = "738fd9d3767b833f423425850f9dfed7";
-
+//current weather display div
 var displayCard = $("#tem-display");
-
+//local storage
 var searchList = JSON.parse(localStorage.getItem("search")) || [];
-
+//show search history
 renderSearchList();
-
+//function to get adn validate user's input, store in local storage if user's input valid 
 function getUserInput() {
     var userInput = $("#city-name").val().trim();
     if (userInput !== "") {
-
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + userInput + "&units=imperial&appid=" + APIKey;
         $.ajax({
             url: queryURL,
             method: "GET",
             success: function () {
+                //insert the input in the first position of array
                 searchList.unshift(userInput);
+                //only store the first five members in array
                 searchList = searchList.slice(0, 5);
+                //remove duplicates
                 searchList = Array.from(new Set(searchList));
+                //store array on local storage
                 localStorage.setItem("search", JSON.stringify(searchList));
                 renderSearchList();
             }
@@ -31,47 +30,43 @@ function getUserInput() {
     else return;
     return userInput;
 }
-
+//display search result fuction. Parameter: city
 function renderWeather(city) {
-
+    //empty display area
     displayCard.empty()
-    // var city = getUserInput();
-
     if (city !== "") {
+        //use ajax request to get current weather
         var queryCurrentURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=" + APIKey;
         $.ajax({
             url: queryCurrentURL,
             method: "GET"
         }).then(function (responseCu) {
-            console.log(responseCu);
-
             var dateStamp = responseCu.dt;
             //this retrieves the unix timestamp
             var dateString = moment.unix(dateStamp).format("MM/DD/YYYY");
-
-            console.log(dateString);
+            //render current date
             $("#city").text(responseCu.name + " (" + dateString + ") ");
+            //render weather icon
             var iconImg = $("<img>");
             var iconCode = responseCu.weather[0].icon;
             var iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png";
             iconImg.attr('src', iconUrl);
             $("#city").append(iconImg);
-
+            //render temp
             var tempF = responseCu.main.temp + " \xB0F";
-
             var temP = $("<p>").text("Temperature: " + tempF);
             displayCard.append(temP);
-
+            //render humidity
             var humP = $("<p>").text("Humidity: " + responseCu.main.humidity + "%");
             displayCard.append(humP);
-
+            //render wind speed
             var winP = $("<p>").text("Wind Speed: " + responseCu.wind.speed + " PMH");
             displayCard.append(winP);
-
+            //get city geographical coordinates
             var lat = responseCu.coord.lat;
             var lon = responseCu.coord.lon;
+            //ajax request to get UV index by geographical coordinates
             var queryUvURL = "http://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&units=imperial&appid=" + APIKey;
-
             $.ajax({
                 url: queryUvURL,
                 method: "GET"
@@ -84,10 +79,7 @@ function renderWeather(city) {
                 UVDiv.attr("id", "UV-index");
                 UVDiv.append(UVSpan);
                 displayCard.append(UVDiv);
-
-
-
-                // Set the class dependent on the UV index
+                // set color class dependent on the UV index
                 if (UV <= 2) {
                     rating = "low";
                 }
@@ -105,7 +97,7 @@ function renderWeather(city) {
                 }
                 UVSpan.addClass(rating);
             })
-
+            //ajax to get five day forecast
             var queryForecastURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&units=imperial&appid=" + APIKey;
             $.ajax({
                 url: queryForecastURL,
@@ -144,8 +136,7 @@ function renderWeather(city) {
         })
     }
 }
-
-
+//function to render search history
 function renderSearchList() {
     $("#search-list").empty();
     for (var i = 0; i < searchList.length; i++) {
@@ -157,17 +148,19 @@ function renderSearchList() {
         $("#search-list").append(searchLi);
     }
 }
-
+//search button listener
 $("#btn-search").on("click", function (event) {
     event.preventDefault();
     renderWeather(getUserInput());
     renderSearchList();
+    $("#fiveday-forecast").removeClass("hide");
 });
-
-$(document).on("click", ".serch-list", function () {
+//search history list listener
+$(document).on("click", ".serch-list", function (event) {
     event.preventDefault();
     var listName = $(this).text();
     renderWeather(listName);
+    $("#fiveday-forecast").removeClass("hide");
 });
 
 

@@ -13,49 +13,47 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-dark bg-dark text-center">
-            <span class="navbar-brand mb-0 mx-auto" id="header">Wheather Dashboard</span>
-        </nav>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col text-center mb-0 mx-auto" id="header">
+                    Wheather Dashboard
+                </div>
+            </div>
+        </div>
     </header>
 
     <section>
         <div class="container">
             <div class="row">
                 <!-- left side -->
-                <div class="col-4" style="background-color: #F6F6F6;">
+                <div class="col-lg-4 col-5" style="background-color: #F6F6F6;">
+                    <div class="row">
+                        <h5 class="card-title mt-3 ml-3">Search for a city:</h5>
+                        <div class="input-group  ml-3" style="width:250px;margin-top: 3px;">
+                            <input type="text" class="form-control" placeholder="City name" id="city-name" />
 
-                    <h5 class="card-title mt-3">Search for a city:</h5>
-                    <div class="input-group" style="width:250px;margin-top: 3px;">
-                        <input type="text" class="form-control" placeholder="City name" id="city-name" />
-
-                        <button type="submit" class="btn btn-primary btn-search" id="btn-search">
-                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                    d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z" />
-                                <path fill-rule="evenodd"
-                                    d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z" />
-                            </svg>
-                        </button>
-
+                            <button type="submit" class="btn btn-primary btn-search" id="btn-search">
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search"
+                                    fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                        d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z" />
+                                    <path fill-rule="evenodd"
+                                        d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                     <ul class="list-group my-3" style="width: 100%;" id="search-list">
-                        <!-- <li class="list-group-item"><a href="">sjflsjkd</a></li>
-                        <li class="list-group-item">Dapibus ac facilisis in</li>
-                        <li class="list-group-item">Morbi leo risus</li>
-                        <li class="list-group-item">Porta ac consectetur ac</li>
-                        <li class="list-group-item">Vestibulum at eros</li> -->
                     </ul>
                 </div>
                 <!-- right side -->
-                <div class="col-8">
+                <div class="col-lg-8 col-7">
                     <div class="card my-3">
                         <h3 class="card-title p-3" id="city">Find your city weather</h3>
                         <div class="card-body" id="tem-display">
-
                         </div>
                     </div>
-                    <div>
+                    <div class="hide" id="fiveday-forecast">
                         <h2>5-Day Forecast</h2>
                         <div class="row">
                             <div class="forecast" id="0"></div>
@@ -70,7 +68,6 @@
         </div>
     </section>
     <script src="./assets/script.js"></script>
-    <!-- <script src="./new.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 </body>
 
