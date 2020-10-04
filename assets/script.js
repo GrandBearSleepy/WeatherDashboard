@@ -1,11 +1,15 @@
 //api key
 var APIKey = "738fd9d3767b833f423425850f9dfed7";
+
 //current weather display div
 var displayCard = $("#tem-display");
+
 //local storage
 var searchList = JSON.parse(localStorage.getItem("search")) || [];
+
 //show search history
 renderSearchList();
+
 //function to get adn validate user's input, store in local storage if user's input valid 
 function getUserInput() {
     var userInput = $("#city-name").val().trim();
@@ -148,20 +152,24 @@ function renderSearchList() {
         $("#search-list").append(searchLi);
     }
 }
-//search button listener
-$("#btn-search").on("click", function (event) {
-    event.preventDefault();
-    renderWeather(getUserInput());
-    renderSearchList();
-    $("#fiveday-forecast").removeClass("hide");
-});
-//search history list listener
-$(document).on("click", ".serch-list", function (event) {
-    event.preventDefault();
-    var listName = $(this).text();
-    renderWeather(listName);
-    $("#fiveday-forecast").removeClass("hide");
-});
+
+$(document).ready(function () {
+    //search button listener
+    $("#btn-search").on("click", function (event) {
+        event.preventDefault();
+        renderWeather(getUserInput());
+        renderSearchList();
+        $("#fiveday-forecast").removeClass("hide");
+    });
+    //search history list listener
+    $(document).on("click", ".serch-list", function (event) {
+        event.preventDefault();
+        var listName = $(this).text();
+        renderWeather(listName);
+        $("#fiveday-forecast").removeClass("hide");
+    });
+})
+
 
 
 
