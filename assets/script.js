@@ -53,7 +53,7 @@ function renderWeather(city) {
             //render weather icon
             var iconImg = $("<img>");
             var iconCode = responseCu.weather[0].icon;
-            var iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png";
+            var iconUrl = "https://openweathermap.org/img/w/" + iconCode + ".png";
             iconImg.attr('src', iconUrl);
             $("#city").append(iconImg);
             //render temp
@@ -70,7 +70,7 @@ function renderWeather(city) {
             var lat = responseCu.coord.lat;
             var lon = responseCu.coord.lon;
             //ajax request to get UV index by geographical coordinates
-            var queryUvURL = "http://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&units=imperial&appid=" + APIKey;
+            var queryUvURL = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&units=imperial&appid=" + APIKey;
             $.ajax({
                 url: queryUvURL,
                 method: "GET"
@@ -117,7 +117,7 @@ function renderWeather(city) {
                     var iconFcImg = $("<img>");
                     var br = $("<br>");
                     var iconFcCode = fiveDayForecast[i].weather[0].icon;
-                    var iconFcUrl = "http://openweathermap.org/img/w/" + iconFcCode + ".png";
+                    var iconFcUrl = "https://openweathermap.org/img/w/" + iconFcCode + ".png";
                     iconFcImg.attr("src", iconFcUrl);
 
                     $("#" + i).append(iconFcImg);
