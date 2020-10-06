@@ -14,7 +14,7 @@ renderSearchList();
 function getUserInput() {
     var userInput = $("#city-name").val().trim();
     if (userInput !== "") {
-        var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + userInput + "&units=imperial&appid=" + APIKey;
+        var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + userInput + "&units=metric&appid=" + APIKey;
         $.ajax({
             url: queryURL,
             method: "GET",
@@ -40,7 +40,7 @@ function renderWeather(city) {
     displayCard.empty()
     if (city !== "") {
         //use ajax request to get current weather
-        var queryCurrentURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=" + APIKey;
+        var queryCurrentURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&appid=" + APIKey;
         $.ajax({
             url: queryCurrentURL,
             method: "GET"
@@ -57,7 +57,7 @@ function renderWeather(city) {
             iconImg.attr('src', iconUrl);
             $("#city").append(iconImg);
             //render temp
-            var tempF = responseCu.main.temp + " \xB0F";
+            var tempF = responseCu.main.temp + " \xB0C";
             var temP = $("<p>").text("Temperature: " + tempF);
             displayCard.append(temP);
             //render humidity
@@ -70,7 +70,7 @@ function renderWeather(city) {
             var lat = responseCu.coord.lat;
             var lon = responseCu.coord.lon;
             //ajax request to get UV index by geographical coordinates
-            var queryUvURL = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&units=imperial&appid=" + APIKey;
+            var queryUvURL = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&units=metric&appid=" + APIKey;
             $.ajax({
                 url: queryUvURL,
                 method: "GET"
@@ -102,7 +102,7 @@ function renderWeather(city) {
                 UVSpan.addClass(rating);
             })
             //ajax to get five day forecast
-            var queryForecastURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&units=imperial&appid=" + APIKey;
+            var queryForecastURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&units=metric&appid=" + APIKey;
             $.ajax({
                 url: queryForecastURL,
                 method: "GET"
@@ -124,7 +124,7 @@ function renderWeather(city) {
                     $("#" + i).append(br);
 
                     var tempP = $("<p>");
-                    var tempFc = "Temp: " + fiveDayForecast[i].temp.day + " \xB0F";
+                    var tempFc = "Temp: " + fiveDayForecast[i].temp.day + " \xB0C";
                     tempP.text(tempFc);
                     $("#" + i).append(tempFc);
                     console.log(tempP);
