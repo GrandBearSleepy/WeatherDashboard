@@ -155,6 +155,8 @@ function renderSearchList() {
 
 $(document).ready(function () {
     //search button listener
+    renderWeather(searchList[0]);
+    $("#fiveday-forecast").removeClass("hide");
     $("#btn-search").on("click", function (event) {
         event.preventDefault();
         renderWeather(getUserInput());
