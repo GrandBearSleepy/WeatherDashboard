@@ -143,6 +143,7 @@ function renderWeather(city) {
 //function to render search history
 function renderSearchList() {
     $("#search-list").empty();
+
     for (var i = 0; i < searchList.length; i++) {
         var searchLi = $("<li>");
         searchLi.addClass("capitalize");
@@ -150,13 +151,17 @@ function renderSearchList() {
         searchLi.addClass("serch-list")
         searchLi.text(searchList[i]);
         $("#search-list").append(searchLi);
+
     }
+
 }
 
 $(document).ready(function () {
     //search button listener
-    renderWeather(searchList[0]);
-    $("#fiveday-forecast").removeClass("hide");
+    if (searchList.length !== 0) {
+        renderWeather(searchList[0]);
+        $("#fiveday-forecast").removeClass("hide");
+    }
     $("#btn-search").on("click", function (event) {
         event.preventDefault();
         renderWeather(getUserInput());
@@ -170,6 +175,8 @@ $(document).ready(function () {
         renderWeather(listName);
         $("#fiveday-forecast").removeClass("hide");
     });
+
+
 })
 
 
